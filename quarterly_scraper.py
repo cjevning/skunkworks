@@ -3,7 +3,6 @@ import ftplib
 from os import listdir, path
 import csv
 
-quartely_path = path.realpath('./') + '/quarterly_files/'
 filenames = []
 
 ftp = ftplib.FTP('ftp.sec.gov')
@@ -13,10 +12,11 @@ for file in listdir('./quarterly_indexes'):
 	with open('./quarterly_indexes/' + file) as csvfile:
 		reader = csv.reader(csvfile, delimiter='|')
 		for row in reader:
-			name = row[1].replace(' ', '_')
-			file = row[4]
-			filenames.append((file, name))
-			break
+			if (row[2] == '10-Q'):
+				name = row[1].replace(' ', '_') + '_10-Q'
+				file = row[4]
+				filenames.append((file, name))
+				break
 	break
 
 for filename, name in filenames:
